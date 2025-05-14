@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import RemoteServer from './server';
 
 class AppUpdater {
   constructor() {
@@ -24,11 +25,70 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let remoteServer: RemoteServer | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+// Handle server start request
+ipcMain.on('start-server', async (event) => {
+  if (!remoteServer) {
+    remoteServer = new RemoteServer();
+    try {
+      const serverUrl = await remoteServer.start();
+      event.reply('server-status', {
+        running: true,
+        url: serverUrl,
+        connectedClients: remoteServer.getConnectedClients(),
+      });
+    } catch (error) {
+      console.error('Failed to start server:', error);
+      event.reply('server-status', {
+        running: false,
+        url: '',
+        connectedClients: 0,
+        error: error.message,
+      });
+    }
+  } else {
+    event.reply('server-status', {
+      running: true,
+      url: remoteServer.getServerUrl(),
+      connectedClients: remoteServer.getConnectedClients(),
+    });
+  }
+});
+
+// Handle server stop request
+ipcMain.on('stop-server', async (event) => {
+  if (remoteServer) {
+    try {
+      await remoteServer.stop();
+      remoteServer = null;
+      event.reply('server-status', {
+        running: false,
+        url: '',
+        connectedClients: 0,
+      });
+    } catch (error) {
+      console.error('Failed to stop server:', error);
+      event.reply('server-status', {
+        running: true,
+        url: remoteServer.getServerUrl(),
+        connectedClients: remoteServer.getConnectedClients(),
+        error: error.message,
+      });
+    }
+  } else {
+    event.reply('server-status', {
+      running: false,
+      url: '',
+      connectedClients: 0,
+    });
+  }
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -96,6 +156,11 @@ const createWindow = async () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+    // Make sure to stop the server when the app is closed
+    if (remoteServer) {
+      remoteServer.stop().catch(console.error);
+      remoteServer = null;
+    }
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);

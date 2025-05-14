@@ -8,55 +8,135 @@ body {
   height: 100vh;
   background: linear-gradient(
     200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
+    #2d3748 0%,
+    #1a202c 47.67%,
+    #171923 100%
   );
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  margin-bottom: 2rem;
+}
+
+.logo h1 {
+  margin: 0.5rem 0;
+  font-size: 2.5rem;
+  color: #63b3ed;
+}
+
+.logo p {
+  margin: 0;
+  color: #a0aec0;
+  font-size: 1.2rem;
+}
+
+.server-controls {
+  margin: 2rem 0;
 }
 
 button {
-  background-color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
   border: none;
-  appearance: none;
-  font-size: 1.3rem;
-  box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
-    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
-  transition: all ease-in 0.1s;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
-  opacity: 0.9;
+  transition: all 0.2s;
+  outline: none;
 }
 
-button:hover {
-  transform: scale(1.05);
-  opacity: 1;
+.start-button {
+  background-color: #48bb78;
+  color: white;
 }
 
-li {
-  list-style: none;
+.start-button:hover {
+  background-color: #38a169;
 }
 
-a {
-  text-decoration: none;
-  height: fit-content;
-  width: fit-content;
-  margin: 10px;
+.stop-button {
+  background-color: #f56565;
+  color: white;
 }
 
-a:hover {
-  opacity: 1;
-  text-decoration: none;
+.stop-button:hover {
+  background-color: #e53e3e;
 }
 
-.Hello {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+.server-info {
+  background-color: rgba(45, 55, 72, 0.5);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.url-display {
+  margin-bottom: 1.5rem;
+}
+
+.url-display h3 {
+  margin-top: 0;
+  color: #63b3ed;
+}
+
+.url-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 1rem;
+  color: #90cdf4;
+  word-break: break-all;
+  margin: 0.5rem 0;
+}
+
+.qr-code {
+  margin: 1.5rem 0;
+}
+
+.qr-code img {
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.client-info {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.client-count {
+  font-weight: bold;
+  color: #63b3ed;
+}
+
+.footer {
+  margin-top: 2rem;
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+.footer p {
+  margin: 0.3rem 0;
 }
